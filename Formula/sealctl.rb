@@ -1,28 +1,28 @@
 class Sealctl < Formula
   desc "Hardware-wallet backed encryption: volumes, backups, secrets, SSH (Ledger OpenPGP)"
   homepage "https://github.com/oleksiyp/sealctl"
-  version "0.4.0"
+  version "0.5.0"
   license "MIT"
 
   on_macos do
     on_arm do
-      url "https://github.com/oleksiyp/sealctl/releases/download/v0.4.0/sealctl-0.4.0-aarch64-apple-darwin.tar.gz"
-      sha256 "67228bcdc4d53c2e6169ab74ea1446f738ee60a9603acded48c7c1cbf96babba"
+      url "https://github.com/oleksiyp/sealctl/releases/download/v0.5.0/sealctl-0.5.0-aarch64-apple-darwin.tar.gz"
+      sha256 "321c7caa398273a5c9af4ead3cf998c826363c992259e4877d0ed6e4d4b6c8ce"
     end
     on_intel do
-      url "https://github.com/oleksiyp/sealctl/releases/download/v0.4.0/sealctl-0.4.0-x86_64-apple-darwin.tar.gz"
-      sha256 "95022b0d97445c304132cf1f1f6f0290909ffaabeeded73de661014e92e1c57e"
+      url "https://github.com/oleksiyp/sealctl/releases/download/v0.5.0/sealctl-0.5.0-x86_64-apple-darwin.tar.gz"
+      sha256 "d1896ab1d8fd78d412449949817d3fe9adb3207b902db1a62fb70b0038bf360e"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/oleksiyp/sealctl/releases/download/v0.4.0/sealctl-0.4.0-aarch64-unknown-linux-gnu.tar.gz"
-      sha256 "5fac7c931f99481b0f8276143f94c45585538865b000c72e5dc3de260b04fc3b"
+      url "https://github.com/oleksiyp/sealctl/releases/download/v0.5.0/sealctl-0.5.0-aarch64-unknown-linux-gnu.tar.gz"
+      sha256 "c56fad9b393f18023d8ab94dac5783eacd94c9c1c3ef659780a0b6b78308ac53"
     end
     on_intel do
-      url "https://github.com/oleksiyp/sealctl/releases/download/v0.4.0/sealctl-0.4.0-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "4643eb854f9827ae0ece926539c99b2711a96e66bf3e786c917223d5bf7158da"
+      url "https://github.com/oleksiyp/sealctl/releases/download/v0.5.0/sealctl-0.5.0-x86_64-unknown-linux-gnu.tar.gz"
+      sha256 "b5d61c0f8ce8b70ce060efb1c2401e96c09a18c39275daa21ccdaff48bdc0783"
     end
   end
 
