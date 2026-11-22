@@ -15,7 +15,7 @@ brew install sealctl/tap/sealctl
 | Platforms | macOS arm64 and x86_64; Linux arm64 and x86_64 (glibc 2.34 or later) |
 | Tarball name | `sealctl-<version>-<target>.tar.gz`, with a `.sha256` file next to it |
 | Installs | `bin/sealctl`; bash, zsh and fish completions from `completions/` in the tarball |
-| Description | "Secrets for AI coding agents, approved on your phone" (under 80 characters, no article, no product name) |
+| Description | "API keys, SSH keys, encrypted volumes and backups, approved on your phone" (under 80 characters, no leading article, no product name) |
 | Homepage | `https://sealctl.com` |
 | Depends on | `restic` (backups) |
 | License | `MIT` |
@@ -38,23 +38,9 @@ Fully automated by `.github/workflows/packages.yml` in `sealctl/sealctl`. Nobody
 
 The deploy key is the only write access the workflow has here. It is a repository deploy key on `sealctl/homebrew-tap` with write access; its private half is the secret in `sealctl/sealctl`.
 
-## Naming after the move to the org
-
-- The repositories moved from `oleksiyp/*` to `sealctl/*`. The tap name is now `sealctl/tap`.
-- GitHub redirects the old URLs, so `oleksiyp/tap` keeps updating for existing users, but under the old name. The README tells them to switch:
-
-  ```sh
-  brew untap oleksiyp/tap
-  brew install sealctl/tap/sealctl
-  ```
-
-- Never create new repositories named `oleksiyp/homebrew-tap` or `oleksiyp/sealctl`: that breaks the redirects.
-- No `tap_migrations.json`: the old and new tap names point to the same repository, so a migration entry would point at itself.
-- No versioned formulae (`sealctl@X.Y`).
-
 ## README
 
-Short: the install command, what sealctl is (starting from `desc`), where to get the phone app (`https://sealctl.com/docs#install`) and `sealctl pair`, and "`Formula/sealctl.rb` is updated by sealctl's release workflow; don't edit it by hand."
+Short: the install command, what sealctl is (the website's summary), where to get the phone app (`https://sealctl.com/docs#install`) and `sealctl pair`, and "`Formula/sealctl.rb` is updated by sealctl's release workflow; don't edit it by hand."
 
 ## Testing
 
