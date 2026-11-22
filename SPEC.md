@@ -1,6 +1,6 @@
 # homebrew-tap spec
 
-This repository is the Homebrew tap `sealctl/tap`. It holds `Formula/sealctl.rb`, which installs the prebuilt `sealctl` binary from the GitHub release, and, from the phone release on, `Formula/sealctl@0.6.rb` for people still leaving the Ledger version.
+This repository is the Homebrew tap `sealctl/tap`. It holds `Formula/sealctl.rb`, which installs the prebuilt `sealctl` binary from the GitHub release.
 
 ```sh
 brew install sealctl/tap/sealctl
@@ -15,22 +15,16 @@ brew install sealctl/tap/sealctl
 | Platforms | macOS arm64 and x86_64; Linux arm64 and x86_64 (glibc 2.34 or later) |
 | Tarball name | `sealctl-<version>-<target>.tar.gz`, with a `.sha256` file next to it |
 | Installs | `bin/sealctl`; bash, zsh and fish completions from `completions/` in the tarball |
-| Depends on | `restic` (backups), `:recommended` from the phone release on |
+| Description | "Secrets for AI coding agents, approved on your phone" (under 80 characters, no article, no product name) |
+| Homepage | `https://sealctl.com` |
+| Depends on | `restic` (backups) |
 | License | `MIT` |
-| Test | `sealctl --version` contains the version; `sealctl --help` lists a known subcommand; from the phone release on also `sealctl status --json` exits 3 (not paired), as `render-formula.sh` writes it |
+| Caveats | Get the sealctl app on your phone (`https://sealctl.com/docs#install`), then run `sealctl pair`; `sealctl ai install` for AI coding agents |
+| Test | `sealctl --version` contains the version; `sealctl --help` lists `pair`. Planned: `sealctl status --json` exits 3 (not paired) |
 
 No bottles: the tarballs are already binaries. No build from source in the tap; `cargo install` is documented on the website for that.
 
-### Changes due with 0.6.0 and the phone release (0.7.0)
-
-The formula text comes from `scripts/render-formula.sh` in `sealctl/sealctl`, so these edits go there, not here:
-
-| Field | Now (0.5.0) | 0.6.0 (Ledger, adds `unseal`) | Phone release (0.7.0) |
-| --- | --- | --- | --- |
-| `desc` | "Hardware-wallet backed encryption: volumes, backups, secrets, SSH (Ledger OpenPGP)" | Unchanged | "Secrets for AI coding agents, approved on your phone" (under 80 characters, no article, no product name) |
-| `homepage` | `https://github.com/sealctl/sealctl` | Unchanged | `https://sealctl.com` |
-| `caveats` | Ledger and Bluetooth setup | Adds: "To leave the Ledger: sealctl unseal --all. It hands everything back under passwords of your own." | "Get the sealctl app on your phone, then run: sealctl pair". And: "Coming from 0.5 with a Ledger? Hand everything back first: brew install sealctl/tap/sealctl@0.6, then run its sealctl unseal --all. See https://sealctl.com/docs/from-ledger" |
-| `test` | `--help` contains `volume` | `--help` contains `unseal` | `--help` contains `pair` |
+The formula text comes from `scripts/render-formula.sh` in `sealctl/sealctl`, so changes to it go there, not here.
 
 Optional: a `livecheck` block (`strategy :github_latest`) so `brew livecheck` reports new versions.
 
@@ -56,11 +50,11 @@ The deploy key is the only write access the workflow has here. It is a repositor
 
 - Never create new repositories named `oleksiyp/homebrew-tap` or `oleksiyp/sealctl`: that breaks the redirects.
 - No `tap_migrations.json`: the old and new tap names point to the same repository, so a migration entry would point at itself.
-- No `sealctl@0.5`. One versioned formula, `sealctl@0.6`, is added when 0.7.0 ships: 0.7 has no Ledger reader, and `brew upgrade` would otherwise leave a 0.5.0 user with no way to run `unseal`. It is `keg_only :versioned_formula` (it does not link `bin/sealctl`, so it never clashes with `sealctl`), pinned to the last 0.6.x tarballs, and run as `$(brew --prefix sealctl@0.6)/bin/sealctl unseal --all`. Its caveats say exactly that. `render-formula.sh` renders it once from the 0.6.x release; it is not updated by later releases.
+- No versioned formulae (`sealctl@X.Y`).
 
 ## README
 
-Short: the install command, one line on what sealctl is (same as `desc`), the switch-over note above, a line for Ledger users ("Leaving the Ledger version: `sealctl unseal --all` with 0.6; `sealctl@0.6` stays installable"), and "`Formula/sealctl.rb` is updated by sealctl's release workflow; don't edit it by hand." The current README still describes the Ledger product and changes with the phone release.
+Short: the install command, what sealctl is (starting from `desc`), where to get the phone app (`https://sealctl.com/docs#install`) and `sealctl pair`, and "`Formula/sealctl.rb` is updated by sealctl's release workflow; don't edit it by hand."
 
 ## Testing
 
@@ -69,7 +63,7 @@ Add `.github/workflows/check.yml`, run on every push to `main` (pushes made with
 | Job | Runner | Steps |
 | --- | --- | --- |
 | audit | `macos-latest` | `brew tap sealctl/tap "$GITHUB_WORKSPACE"`; `brew audit --strict --online --tap sealctl/tap`; `brew style sealctl/tap` |
-| install | `macos-latest`, `ubuntu-24.04` (Homebrew on Linux) | `brew install sealctl/tap/sealctl`; `brew test sealctl/tap/sealctl`; `sealctl --version`; once it exists, `brew install sealctl/tap/sealctl@0.6` next to it and its `sealctl --help` lists `unseal` |
+| install | `macos-latest`, `ubuntu-24.04` (Homebrew on Linux) | `brew install sealctl/tap/sealctl`; `brew test sealctl/tap/sealctl`; `sealctl --version` |
 
 - Fix what `brew audit --strict` reports in `render-formula.sh` (for example, a `version` line it calls redundant because the URLs carry the version), not in this repo.
 - A failed check after a release means the release is broken for Homebrew users: fix forward with a patch release.
