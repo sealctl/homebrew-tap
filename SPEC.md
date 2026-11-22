@@ -30,13 +30,14 @@ Optional: a `livecheck` block (`strategy :github_latest`) so `brew livecheck` re
 
 ## How releases update it
 
-Fully automated by `.github/workflows/packages.yml` in `sealctl/sealctl`. Nobody edits `Formula/sealctl.rb` by hand.
+Automated by `.github/workflows/packages.yml` in `sealctl/sealctl`. Nobody edits `Formula/sealctl.rb` by hand.
 
 1. A maintainer pushes tag `vX.Y.Z` on `sealctl/sealctl` (the tag must match the workspace version in `Cargo.toml`).
-2. The workflow builds macOS and Linux tarballs and their `.sha256` files, install-tests them (including `brew install` and `brew test` of a formula rendered from the local tarballs), and publishes the GitHub release.
-3. Job `tap` checks out this repository with the deploy key from secret `HOMEBREW_TAP_DEPLOY_KEY`, runs `scripts/render-formula.sh <version> <release URL> dist > Formula/sealctl.rb`, and pushes a commit titled `sealctl X.Y.Z` as `github-actions[bot]`.
+2. The workflow builds macOS and Linux tarballs and their `.sha256` files (tag builds start without the Actions cache), install-tests them (including `brew install` and `brew test` of a formula rendered from the local tarballs), writes `SHA256SUMS`, attests every file with `actions/attest-build-provenance`, and publishes the GitHub release.
+3. Job `tap` downloads the published tarballs, checks each against the `.sha256` computed at build time and runs `gh attestation verify` on it. Only then does it check out this repository with the deploy key from secret `HOMEBREW_TAP_DEPLOY_KEY`, run `scripts/render-formula.sh <version> <release URL> dist > Formula/sealctl.rb` and commit `sealctl X.Y.Z` as `github-actions[bot]`.
+4. `main` here is protected by the ruleset `main` (pull requests only, squash merge). The job pushes to `main`; when the ruleset refuses that push, it pushes branch `formula/sealctl-X.Y.Z` instead and links a pull request in the run summary, which a maintainer opens and merges. Adding the deploy key as a bypass actor of the ruleset makes step 4 a direct push again.
 
-The deploy key is the only write access the workflow has here. It is a repository deploy key on `sealctl/homebrew-tap` with write access; its private half is the secret in `sealctl/sealctl`.
+The deploy key is the only write access the workflow has here. It is a repository deploy key on `sealctl/homebrew-tap` with write access; its private half is the secret in `sealctl/sealctl`. The formula pins each tarball by `sha256`, so a changed release asset fails `brew install` rather than installing.
 
 ## README
 
