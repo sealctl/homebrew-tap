@@ -1,28 +1,28 @@
 class Sealctl < Formula
   desc "API keys, SSH keys, encrypted volumes and backups, approved on your phone"
   homepage "https://sealctl.com"
-  version "0.7.0"
+  version "0.7.1"
   license "MIT"
 
   on_macos do
     on_arm do
-      url "https://github.com/sealctl/sealctl/releases/download/v0.7.0/sealctl-0.7.0-aarch64-apple-darwin.tar.gz"
-      sha256 "b251c440727ca9008678d005a21e5ccf9551d602409568d376217f6845bda334"
+      url "https://github.com/sealctl/sealctl/releases/download/v0.7.1/sealctl-0.7.1-aarch64-apple-darwin.tar.gz"
+      sha256 "0c824a30540133132bc4096897489bba53e2e580883f73eaacec969efbb091d0"
     end
     on_intel do
-      url "https://github.com/sealctl/sealctl/releases/download/v0.7.0/sealctl-0.7.0-x86_64-apple-darwin.tar.gz"
-      sha256 "5cd0dcababc93e4d5c27bca55181a4cfa0a58501cbbb05707ca016c375ed3fbb"
+      url "https://github.com/sealctl/sealctl/releases/download/v0.7.1/sealctl-0.7.1-x86_64-apple-darwin.tar.gz"
+      sha256 "71b978844eb3c4ebda0da3867758a48100c36a935ebdcf6c042e638643d89460"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/sealctl/sealctl/releases/download/v0.7.0/sealctl-0.7.0-aarch64-unknown-linux-gnu.tar.gz"
-      sha256 "1d57380727b0e546b2d0e20b4e8da94779ffb2848efcfbdcc648aeabf07c876f"
+      url "https://github.com/sealctl/sealctl/releases/download/v0.7.1/sealctl-0.7.1-aarch64-unknown-linux-gnu.tar.gz"
+      sha256 "330688bb64e69fa5bc53889529ed71bf59fc4354629da47e7fda25f8f9e99e92"
     end
     on_intel do
-      url "https://github.com/sealctl/sealctl/releases/download/v0.7.0/sealctl-0.7.0-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "dd7e06c943cf722fceedf626d7636b411f7e9be04b425afd770e06e8ce3510ff"
+      url "https://github.com/sealctl/sealctl/releases/download/v0.7.1/sealctl-0.7.1-x86_64-unknown-linux-gnu.tar.gz"
+      sha256 "95a6955c80a9dc5970b21f8c36c2a7c925e35f9a02ebaebbbbc2d3f09c4c1053"
     end
   end
 
@@ -30,6 +30,9 @@ class Sealctl < Formula
 
   def install
     bin.install "sealctl"
+    # desktop notifications under the name "sealctl" with its icon (SPEC 5.2); sealctl finds
+    # it in ../libexec
+    libexec.install "sealctl Notifier.app" if OS.mac?
     doc.install "THIRD-PARTY-NOTICES.md"
     bash_completion.install "completions/sealctl.bash" => "sealctl"
     zsh_completion.install "completions/_sealctl"
@@ -47,5 +50,6 @@ class Sealctl < Formula
   test do
     assert_match version.to_s, shell_output("#{bin}/sealctl --version")
     assert_match "pair", shell_output("#{bin}/sealctl --help")
+    assert_predicate libexec/"sealctl Notifier.app/Contents/MacOS/sealctl-notifier", :executable? if OS.mac?
   end
 end
